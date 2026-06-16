@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fat Cat Gems - The Vault</title>
+    <style>
+        :root { 
+            --dark-bg: #0a0a0a; 
+            --gold: #c5a059; 
+            --purple: #4b0082; 
+            --text: #e0e0e0; 
+        }
+        body { 
+            background: var(--dark-bg); 
+            color: var(--text); 
+            font-family: 'Cinzel', serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            margin: 0; 
+            min-height: 100vh; 
+        }
+        /* Vault Aesthetic Styling */
+        #vault-header { text-align: center; margin-top: 20px; border-bottom: 2px solid var(--gold); width: 80%; }
+        #wheel { 
+            width: 500px; height: 500px; 
+            border-radius: 50%; 
+            border: 15px double var(--gold); 
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); 
+            position: relative; 
+            margin-top: 50px;
+        }
+        .control-panel { 
+            background: #1a1a1a; 
+            padding: 20px; 
+            border: 1px solid var(--gold); 
+            border-radius: 10px; 
+            margin-top: 30px; 
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
 
+<header id="vault-header">
+    <h1>FAT CAT GEMS</h1>
+    <p>Guardian of the Vault: Lily | Every Set Wins</p>
+</header>
+
+<div id="wheel"></div>
+<button onclick="spin()" style="padding: 15px 30px; margin-top: 20px; cursor: pointer; background: var(--gold); border: none;">SPIN THE VAULT</button>
+
+<div class="control-panel">
+    <input type="text" id="buyer" placeholder="Buyer Username">
+    <div id="result" style="margin-top: 15px;">Result: Awaiting spin...</div>
+</div>
+
+<script>
+    /* EDITABLE CONFIGURATION */
+    let inventory = {
+        std1: 146, 
+        std2: 145,
+        banger: 8,
+        main: 1
+    };
+    
+    let spinCount = 0;
+
+    function spin() {
+        if (spinCount >= 300) { alert("Vault Closed: 300 spins complete."); return; }
+        
+        let pool = [];
+        
+        // Add Standards
+        for(let i=0; i<inventory.std1; i++) pool.push("Natural Diamonds 0.01 ct");
+        for(let i=0; i<inventory.std2; i++) pool.push("Natural Diamonds 0.01-0.005 ct");
+
+        // Pacing Logic: 4 Bangers at 150, remaining at 250
+        if (spinCount >= 150) {
+            let bangerCount = (spinCount >= 250) ? 8 : 4; 
+            for(let i=0; i<bangerCount; i++) pool.push("Banger");
+        }
+        
+        // Main Yellow unlock at 250[cite: 1]
+        if (spinCount >= 250 && inventory.main > 0) {
+            pool.push("Main Yellow 0.38 ct");
+        }
+
+        const winner = pool[Math.floor(Math.random() * pool.length)];
+        spinCount++;
+        
+        document.getElementById('result').innerText = `Winner: ${document.getElementById('buyer').value || 'Guest'} | Prize: ${winner}`;
+        document.getElementById('wheel').style.transform = `rotate(${spinCount * 45}deg)`;
+    }
+</script>
+</body>
+</html>
